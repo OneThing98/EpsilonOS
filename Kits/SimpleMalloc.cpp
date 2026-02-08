@@ -41,9 +41,28 @@ namespace SimpleMalloc {
     
     class ChunkAllocator8{
         public:
+            static constexpr dword CHUNK_SIZE=8;
+
+            static constexpr dword capacityInAllocations() {
+                return 1048576 / CHUNK_SIZE; //1MB /8 bytes = 131,072 chunks
+
+            }
+
+            static constexpr dword capacityInBytes() {
+                return capacityInAllocations() * CHUNK_SIZE;
+            }
+
+            static constexpr dword sizeOfAllocationBitmapInBytes()
+            {
+                return capacityInAllocations() / 8;
+            }
+
             void initialize(byte* base){
                 m_base = base;
-                printf("ChunkAllocator8 initialized at %p\n", base);
+                printf("ChunkAllocator8:\n");
+                printf(" Can hold: %u chunks\n", capacityInAllocations());
+                printf(" Bitmap size: %u bytes \n", sizeOfAllocationBitmapInBytes());
+                printf("Data size: %u bytes\n", capacityInBytes());
             }
 
         private:
