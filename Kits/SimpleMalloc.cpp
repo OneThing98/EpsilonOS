@@ -1,4 +1,5 @@
 #include "SimpleMalloc.h"
+#include<cstdio>
 #include "Assertions.h"
 #include "Types.h"
 
@@ -6,12 +7,9 @@ namespace SimpleMalloc {
 
     class AllocationBitmap {
         public:
-            AllocationBitmap(byte* data, unsigned size)
-                :m_data(data)
-                ,m_size(size)
-        {
-
-        }
+            static AllocationBitmap wrap(byte* data, unsigned size){
+                return AllocationBitmap(data,size);
+            }
             bool get(unsigned index) const {
                 ASSERT(index < m_size);
                 // index/8 -> which byte?
@@ -31,7 +29,24 @@ namespace SimpleMalloc {
             }
 
         private:
+            AllocationBitmap(byte* data, unsigned size)
+                : m_data(data)
+                , m_size(size)
+                {
+
+                }
              byte* m_data{nullptr};
              unsigned m_size {0};
+    };
+    
+    class ChunkAllocator8{
+        public:
+            void initialize(byte* base){
+                m_base = base;
+                printf("ChunkAllocator8 initialized at %p\n", base);
+            }
+
+        private:
+            byte* m_base {nullptr};
     };
 }
